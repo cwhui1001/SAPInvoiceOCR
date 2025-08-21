@@ -93,7 +93,7 @@ export default function AccountForm({ user }: { user: User | null }) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto responsive-main" style={{ padding: '16px' }}>
+    <div className="max-w-4xl mx-auto responsive-main" style={{ padding: '25px' }}>
       {/* Header */}
       <div className="mb-8">
         <h1 className={`${inter.className} responsive-title text-3xl font-bold text-gray-900 mb-2`}>

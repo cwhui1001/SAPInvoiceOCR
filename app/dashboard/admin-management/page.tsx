@@ -51,7 +51,7 @@ export default async function AdminManagementPage() {
   }
 
   return (
-    <div className="w-full responsive-main" style={{ padding: '16px' }}>
+    <div className="w-full responsive-main" style={{ padding: '25px' }}>
       <div className="flex w-full flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="responsive-title text-2xl font-bold">Admin Management</h1>
       </div>

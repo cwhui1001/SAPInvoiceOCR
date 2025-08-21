@@ -24,8 +24,8 @@ export default function QuickActions() {
       }
     },
     {
-      title: 'View Analytics',
-      description: 'View invoice analytics and reports',
+      title: 'View Invoices',
+      description: 'View invoice details and history',
       icon: ChartBarIcon,
       onClick: () => {
         window.location.href = '/dashboard/invoices';

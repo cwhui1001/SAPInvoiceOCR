@@ -58,7 +58,7 @@ export default async function Page({
   ]);
 
   return (
-    <div className="w-full responsive-main" style={{ padding: '16px' }}>
+    <div className="w-full responsive-main" style={{ padding: '25px' , backgroundColor: '#faf9f9ff' }}>
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

@@ -14,7 +14,7 @@ export default async function Page() {
   const topUploaders = await fetchTopUploaders();
 
   return (
-    <main style={{ padding: '16px', backgroundColor: '#faf9f9ff' }} className="responsive-main">
+    <main style={{ padding: '25px', backgroundColor: '#faf9f9ff' }} className="responsive-main">
       {/* Page Header */}
       <div style={{ marginBottom: '24px' }}>
         <h1 className="responsive-title" style={{ fontSize: '24px', fontWeight: '600', color: '#32363a', margin: '0 0 4px 0' }}>
