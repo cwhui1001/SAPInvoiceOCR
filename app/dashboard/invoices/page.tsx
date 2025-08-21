@@ -3,13 +3,15 @@ import { InvoiceSearch } from '@/app/ui/invoices/search';
 import { StatusFilter } from '@/app/ui/invoices/status-filter-individual';
 import { DateRangeFilter } from '@/app/ui/invoices/date-range-filter';
 import { AmountRangeFilter } from '@/app/ui/invoices/amount-range-filter';
+import { UserFilter } from '@/app/ui/invoices/user-filter';
 import InvoicesTable from '@/app/ui/invoices/table';
 import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { Metadata } from 'next';
-import { fetchFilteredInvoices, fetchInvoicesPages } from '@/app/lib/data';
+import { fetchFilteredInvoices, fetchInvoicesPages, fetchUsersWithUploads } from '@/app/lib/data';
 import Pagination from '@/app/ui/invoices/pagination';
 import UploadButton from '@/app/ui/invoices/upload-button';
 import RefreshButton from '@/app/ui/invoices/refresh-button';
+import { createClient } from '@/utils/supabase/server';
 
 // Define the Invoice type (move to definitions.ts if not already there)
 interface Invoice {
@@ -40,6 +42,7 @@ export default async function Page({
     dateTo?: string;
     amountMin?: string;
     amountMax?: string;
+    user?: string;
     page?: string;
   }>;
 }) {
@@ -50,10 +53,47 @@ export default async function Page({
   const dateTo = params?.dateTo || '';
   const amountMin = params?.amountMin || '';
   const amountMax = params?.amountMax || '';
+  const filterByUser = params?.user || '';
   const currentPage = Number(params?.page) || 1;
 
+  // Get current user and role
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let userRole = '';
+  let currentUsername = '';
+  
+  if (user) {
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('role, username')
+      .eq('id', user.id)
+      .single();
+    
+    if (profileData) {
+      userRole = profileData.role || '';
+      currentUsername = profileData.username || '';
+    }
+  }
+
+  // Get users with uploads for the user filter (only for superadmin)
+  let usersWithUploads: { username: string; displayName: string }[] = [];
+  if (userRole === 'superadmin') {
+    try {
+      const users = await fetchUsersWithUploads();
+      usersWithUploads = users
+        .filter(u => u.username) // Only users with usernames
+        .map(u => ({
+          username: u.username,
+          displayName: u.display_name || u.username
+        }));
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  }
+
   const [invoices, totalPages] = await Promise.all([
-    fetchFilteredInvoices(query, currentPage, status, dateFrom, dateTo, amountMin, amountMax) as Promise<Invoice[]>,
+    fetchFilteredInvoices(query, currentPage, status, dateFrom, dateTo, amountMin, amountMax, userRole, currentUsername, filterByUser) as Promise<Invoice[]>,
     fetchInvoicesPages(query),
   ]);
 
@@ -86,6 +126,9 @@ export default async function Page({
               <StatusFilter />
               <DateRangeFilter />
               <AmountRangeFilter />
+              {userRole === 'superadmin' && usersWithUploads.length > 0 && (
+                <UserFilter users={usersWithUploads} />
+              )}
             </div>
           </div>
         </div>

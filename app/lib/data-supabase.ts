@@ -62,7 +62,10 @@ export async function fetchFilteredInvoices(
   dateFrom?: string,
   dateTo?: string,
   amountMin?: string,
-  amountMax?: string
+  amountMax?: string,
+  userRole?: string,
+  currentUsername?: string,
+  filterByUser?: string
 ) {
   try {
   const supabase = await createClient();
@@ -165,6 +168,20 @@ export async function fetchFilteredInvoices(
         has_uploaded_pdf: hasUploadedPdf,
       };
     });
+
+    // Apply role-based filtering
+    if (userRole === 'admin' && currentUsername) {
+      transformedInvoices = transformedInvoices.filter(invoice => 
+        invoice.uploader_username === currentUsername
+      );
+    }
+    
+    // Apply user filter for superadmin
+    if (userRole === 'superadmin' && filterByUser) {
+      transformedInvoices = transformedInvoices.filter(invoice => 
+        invoice.uploader_username === filterByUser
+      );
+    }
 
     if (dateFrom || dateTo) {
       transformedInvoices = transformedInvoices.filter(inv => {

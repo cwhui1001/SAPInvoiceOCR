@@ -40,7 +40,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
         
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-white">
+        <main className="flex-1 overflow-y-auto bg-grey">
           <div className="h-full">
             {children}
           </div>

@@ -196,7 +196,7 @@ export default function EditInvoiceForm({ invoiceData, customers }: EditInvoiceF
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full" style={{ padding: '5px' }}>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Invoice Header Section */}
         <div className="rounded-lg bg-white shadow-sm border border-gray-200 p-6">

@@ -17,7 +17,7 @@ export default async function EditInvoicePage({ params }: { params: { id: string
     }
 
     return (
-      <main>
+      <main style={{ padding: '25px', backgroundColor: '#faf9f9ff' }}>
         <Breadcrumbs
           breadcrumbs={[
             { label: 'Invoices', href: '/dashboard/invoices' },

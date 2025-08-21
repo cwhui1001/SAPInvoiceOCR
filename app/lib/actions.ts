@@ -162,7 +162,7 @@ export async function updateInvoice(
   }
 }
 
-export async function deleteInvoice(invoiceId: string) {
+export async function deleteInvoice(invoiceId: string, shouldRedirect: boolean = true) {
   try {
     console.log('Attempting to delete invoice with ID:', invoiceId);
     const supabase = await createAdminClient();
@@ -295,7 +295,10 @@ export async function deleteInvoice(invoiceId: string) {
 
     console.log(`Successfully deleted invoice ${invoiceId} and associated files`);
     revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
+    
+    if (shouldRedirect) {
+      redirect('/dashboard/invoices');
+    }
   } catch (error) {
     console.error('Error deleting invoice:', error);
     throw error;

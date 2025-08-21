@@ -25,7 +25,7 @@ export default function BulkActions({
     setIsProcessing(true);
     try {
       await Promise.all(
-        selectedInvoices.map(id => deleteInvoice(id))
+        selectedInvoices.map(id => deleteInvoice(id, false)) // Don't redirect for bulk operations
       );
       onDeselectAll();
       onActionComplete();
