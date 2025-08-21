@@ -1,0 +1,53 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev --turbopack",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-popover": "^1.1.14",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.50.3",
+    "@tailwindcss/forms": "^0.5.10",
+    "@ui5/webcomponents": "^2.13.2",
+    "@ui5/webcomponents-fiori": "^2.13.2",
+    "@ui5/webcomponents-icons": "^2.13.2",
+    "@ui5/webcomponents-react": "^2.13.1",
+    "autoprefixer": "10.4.20",
+    "bcrypt": "^5.1.1",
+    "chart.js": "^4.5.0",
+    "clsx": "^2.1.1",
+    "dotenv": "^17.0.1",
+    "framer-motion": "^12.23.9",
+    "jwt-decode": "^4.0.0",
+    "lucide": "^0.536.0",
+    "lucide-react": "^0.536.0",
+    "next": "^15.5.0",
+    "next-auth": "5.0.0-beta.25",
+    "postcss": "8.5.1",
+    "postgres": "^3.4.6",
+    "react": "^19.1.1",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^19.1.1",
+    "recharts": "^3.1.0",
+    "tailwindcss": "3.4.17",
+    "typescript": "5.7.3",
+    "use-debounce": "^10.0.4",
+    "zod": "^3.25.17"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "22.10.7",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "bcrypt",
+      "sharp"
+    ]
+  }
+}

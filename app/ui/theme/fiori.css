@@ -1,0 +1,321 @@
+/* SAP Fiori 3 CSS Styles */
+/* Import SAP 72 font family */
+@import url('https://ui5.sap.com/resources/sap/ui/core/themes/sap_fiori_3/fonts/72-font.css');
+
+/* CSS Custom Properties for SAP Fiori 3 */
+:root {
+  /* Colors */
+  --sap-brand-color: #0070f3;
+  --sap-highlight-color: #0070f3;
+  --sap-base-color: #ffffff;
+  --sap-shell-color: #354a5f;
+  
+  /* Semantic Colors */
+  --sap-positive-color: #30914c;
+  --sap-negative-color: #bb0000;
+  --sap-critical-color: #e76500;
+  --sap-neutral-color: #6a6d70;
+  --sap-information-color: #0070f3;
+  
+  /* Background Colors */
+  --sap-background-color: #fafafa;
+  --sap-shell-background-color: #354a5f;
+  --sap-tile-background-color: #ffffff;
+  --sap-list-background-color: #ffffff;
+  
+  /* Text Colors */
+  --sap-text-color: #32363a;
+  --sap-link-color: #0070f3;
+  --sap-title-color: #32363a;
+  --sap-negative-text-color: #bb0000;
+  --sap-positive-text-color: #30914c;
+  --sap-critical-text-color: #e76500;
+  --sap-neutral-text-color: #6a6d70;
+  
+  /* Border Colors */
+  --sap-list-border-color: #e5e5e5;
+  --sap-field-border-color: #89919a;
+  --sap-field-focus-border-color: #0070f3;
+  
+  /* Button Colors */
+  --sap-button-background: #ffffff;
+  --sap-button-border-color: #0070f3;
+  --sap-button-text-color: #0070f3;
+  --sap-button-hover-background: #ebf8ff;
+  --sap-button-active-background: #0070f3;
+  --sap-button-active-text-color: #ffffff;
+  
+  /* Emphasized Button */
+  --sap-button-emphasized-background: #0070f3;
+  --sap-button-emphasized-border-color: #0070f3;
+  --sap-button-emphasized-text-color: #ffffff;
+  --sap-button-emphasized-hover-background: #0040b0;
+  
+  /* Input Field Colors */
+  --sap-field-background: #ffffff;
+  --sap-field-hover-background: #f7f7f7;
+  --sap-field-focus-background: #ffffff;
+  --sap-field-invalid-color: #bb0000;
+  --sap-field-warning-color: #e76500;
+  --sap-field-success-color: #30914c;
+  
+  /* Selection Colors */
+  --sap-selected-color: #0070f3;
+  --sap-active-color: #0070f3;
+  --sap-hover-color: #ebf8ff;
+  
+  /* Typography */
+  --sap-font-family: "72", "72full", Arial, Helvetica, sans-serif;
+  --sap-font-size-small: 0.75rem;
+  --sap-font-size-medium: 0.875rem;
+  --sap-font-size-large: 1rem;
+  --sap-font-size-xlarge: 1.125rem;
+  --sap-font-size-xxlarge: 1.25rem;
+  --sap-font-size-xxxlarge: 1.5rem;
+  
+  /* Spacing */
+  --sap-spacing-tiny: 0.25rem;
+  --sap-spacing-small: 0.5rem;
+  --sap-spacing-medium: 1rem;
+  --sap-spacing-large: 1.5rem;
+  --sap-spacing-xlarge: 2rem;
+  --sap-spacing-xxlarge: 3rem;
+  
+  /* Border Radius */
+  --sap-border-radius-small: 0.25rem;
+  --sap-border-radius-medium: 0.375rem;
+  --sap-border-radius-large: 0.5rem;
+  
+  /* Shadows */
+  --sap-shadow-level0: none;
+  --sap-shadow-level1: 0 0.125rem 0.5rem 0 rgba(0, 0, 0, 0.1);
+  --sap-shadow-level2: 0 0.625rem 2rem 0 rgba(0, 0, 0, 0.1);
+  --sap-shadow-level3: 0 1.25rem 5rem 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Base Styles */
+body {
+  font-family: var(--sap-font-family);
+  font-size: var(--sap-font-size-medium);
+  color: var(--sap-text-color);
+  background-color: var(--sap-background-color);
+  line-height: 1.4;
+}
+
+/* Fiori Button Styles */
+.fiori-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--sap-button-border-color);
+  border-radius: var(--sap-border-radius-medium);
+  background-color: var(--sap-button-background);
+  color: var(--sap-button-text-color);
+  font-family: var(--sap-font-family);
+  font-size: var(--sap-font-size-medium);
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 2.25rem;
+}
+
+.fiori-button:hover {
+  background-color: var(--sap-button-hover-background);
+  border-color: var(--sap-button-border-color);
+}
+
+.fiori-button:active,
+.fiori-button:focus {
+  background-color: var(--sap-button-active-background);
+  color: var(--sap-button-active-text-color);
+  outline: 2px solid var(--sap-brand-color);
+  outline-offset: 2px;
+}
+
+.fiori-button--emphasized {
+  background-color: var(--sap-button-emphasized-background);
+  border-color: var(--sap-button-emphasized-border-color);
+  color: var(--sap-button-emphasized-text-color);
+}
+
+.fiori-button--emphasized:hover {
+  background-color: var(--sap-button-emphasized-hover-background);
+}
+
+/* Fiori Card Styles */
+.fiori-card {
+  background-color: var(--sap-tile-background-color);
+  border: 1px solid var(--sap-list-border-color);
+  border-radius: var(--sap-border-radius-large);
+  box-shadow: var(--sap-shadow-level1);
+  padding: var(--sap-spacing-medium);
+  margin-bottom: var(--sap-spacing-medium);
+}
+
+.fiori-card__header {
+  margin-bottom: var(--sap-spacing-medium);
+  padding-bottom: var(--sap-spacing-small);
+  border-bottom: 1px solid var(--sap-list-border-color);
+}
+
+.fiori-card__title {
+  font-size: var(--sap-font-size-large);
+  font-weight: 600;
+  color: var(--sap-title-color);
+  margin: 0;
+}
+
+.fiori-card__content {
+  color: var(--sap-text-color);
+}
+
+/* Fiori Input Styles */
+.fiori-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--sap-field-border-color);
+  border-radius: var(--sap-border-radius-medium);
+  background-color: var(--sap-field-background);
+  color: var(--sap-text-color);
+  font-family: var(--sap-font-family);
+  font-size: var(--sap-font-size-medium);
+  line-height: 1.4;
+  transition: all 0.2s ease;
+  min-height: 2.25rem;
+  box-sizing: border-box;
+}
+
+.fiori-input:hover {
+  background-color: var(--sap-field-hover-background);
+}
+
+.fiori-input:focus {
+  outline: none;
+  border-color: var(--sap-field-focus-border-color);
+  background-color: var(--sap-field-focus-background);
+  box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+}
+
+.fiori-input--invalid {
+  border-color: var(--sap-field-invalid-color);
+}
+
+.fiori-input--warning {
+  border-color: var(--sap-field-warning-color);
+}
+
+.fiori-input--success {
+  border-color: var(--sap-field-success-color);
+}
+
+/* Fiori Table Styles */
+.fiori-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--sap-list-background-color);
+  border: 1px solid var(--sap-list-border-color);
+  border-radius: var(--sap-border-radius-medium);
+  overflow: hidden;
+}
+
+.fiori-table__header {
+  background-color: #fafafa;
+  border-bottom: 1px solid var(--sap-list-border-color);
+}
+
+.fiori-table__header th {
+  padding: var(--sap-spacing-medium);
+  text-align: left;
+  font-weight: 600;
+  color: var(--sap-title-color);
+  font-size: var(--sap-font-size-medium);
+}
+
+.fiori-table__row {
+  border-bottom: 1px solid var(--sap-list-border-color);
+  transition: background-color 0.2s ease;
+}
+
+.fiori-table__row:hover {
+  background-color: #f7f7f7;
+}
+
+.fiori-table__cell {
+  padding: var(--sap-spacing-medium);
+  color: var(--sap-text-color);
+  font-size: var(--sap-font-size-medium);
+}
+
+/* Fiori Navigation Styles */
+.fiori-shell {
+  background-color: var(--sap-shell-background-color);
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+.fiori-nav-item {
+  display: flex;
+  align-items: center;
+  padding: var(--sap-spacing-medium);
+  color: #ffffff;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  border-radius: var(--sap-border-radius-medium);
+  margin-bottom: var(--sap-spacing-small);
+}
+
+.fiori-nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.fiori-nav-item--active {
+  background-color: var(--sap-brand-color);
+}
+
+/* Status Indicators */
+.fiori-status--positive {
+  color: var(--sap-positive-color);
+}
+
+.fiori-status--negative {
+  color: var(--sap-negative-color);
+}
+
+.fiori-status--critical {
+  color: var(--sap-critical-color);
+}
+
+.fiori-status--neutral {
+  color: var(--sap-neutral-color);
+}
+
+.fiori-status--information {
+  color: var(--sap-information-color);
+}
+
+/* Utility Classes */
+.fiori-text--small {
+  font-size: var(--sap-font-size-small);
+}
+
+.fiori-text--medium {
+  font-size: var(--sap-font-size-medium);
+}
+
+.fiori-text--large {
+  font-size: var(--sap-font-size-large);
+}
+
+.fiori-spacing--small {
+  margin: var(--sap-spacing-small);
+}
+
+.fiori-spacing--medium {
+  margin: var(--sap-spacing-medium);
+}
+
+.fiori-spacing--large {
+  margin: var(--sap-spacing-large);
+}
