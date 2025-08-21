@@ -310,11 +310,100 @@ body {
   grid-template-columns: repeat(4, 1fr);
 }
 
+/* SAP Fiori Cards - Mobile responsive */
+.sap-fiori-card {
+  min-width: 0; /* Prevent overflow on mobile */
+  word-wrap: break-word;
+}
+
+.sap-fiori-card-content {
+  overflow-x: auto; /* Allow horizontal scroll for content if needed */
+}
+
 @media (max-width: 768px) {
   .sap-grid-2,
   .sap-grid-3,
   .sap-grid-4 {
     grid-template-columns: 1fr;
+  }
+  
+  /* Mobile responsive styles */
+  .responsive-main {
+    padding: 12px !important;
+  }
+  
+  .responsive-title {
+    font-size: 20px !important;
+  }
+  
+  .responsive-subtitle {
+    font-size: 13px !important;
+  }
+  
+  .responsive-content {
+    gap: 12px;
+  }
+  
+  .responsive-column {
+    gap: 12px !important;
+  }
+  
+  .sap-fiori-card {
+    margin-bottom: 0;
+  }
+  
+  /* Table responsive */
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  /* Buttons responsive */
+  .btn-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .btn-group button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-main {
+    padding: 8px !important;
+  }
+  
+  .responsive-title {
+    font-size: 18px !important;
+  }
+  
+  .sap-grid {
+    gap: 8px;
+  }
+  
+  .responsive-content {
+    gap: 8px;
+  }
+  
+  .responsive-column {
+    gap: 8px !important;
+  }
+  
+  /* Very small screen adjustments */
+  .sap-fiori-card-header {
+    padding: 12px 16px;
+  }
+  
+  .sap-fiori-card-content {
+    padding: 12px 16px;
+  }
+  
+  .sap-fiori-card-title {
+    font-size: 14px;
+  }
+  
+  .sap-fiori-card-subtitle {
+    font-size: 12px;
   }
 }
 

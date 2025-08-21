@@ -93,13 +93,13 @@ export default function AccountForm({ user }: { user: User | null }) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto responsive-main" style={{ padding: '16px' }}>
       {/* Header */}
       <div className="mb-8">
-        <h1 className={`${inter.className} text-3xl font-bold text-gray-900 mb-2`}>
+        <h1 className={`${inter.className} responsive-title text-3xl font-bold text-gray-900 mb-2`}>
           Profile Settings
         </h1>
-        <p className="text-gray-600">
+        <p className="responsive-subtitle text-gray-600">
           Manage your account settings and preferences
         </p>
       </div>

@@ -1,12 +1,6 @@
 'use client';
 
 import React from 'react';
-import { 
-  Table as UI5Table, 
-  TableColumn, 
-  TableRow, 
-  TableCell 
-} from '@ui5/webcomponents-react';
 import clsx from 'clsx';
 
 interface Column {
@@ -79,44 +73,45 @@ export function FioriTable({
   }
 
   return (
-    <UI5Table
-      className={tableClasses}
-      stickyColumnHeader={stickyColumnHeader}
-      {...rest}
-    >
+    <div className={tableClasses}>
       {/* Table Header */}
-      {columns.map((column) => (
-        <TableColumn
-          key={column.key}
-          style={{
-            width: column.width,
-            minWidth: column.minWidth,
-          }}
-        >
-          <span className="fiori-table__header-text">
-            {column.header}
-          </span>
-        </TableColumn>
-      ))}
+      <div className="fiori-table__header">
+        {columns.map((column) => (
+          <div
+            key={column.key}
+            className="fiori-table__header-cell"
+            style={{
+              width: column.width,
+              minWidth: column.minWidth,
+            }}
+          >
+            <span className="fiori-table__header-text">
+              {column.header}
+            </span>
+          </div>
+        ))}
+      </div>
 
-      {/* Table Rows */}
-      {data.map((row, index) => (
-        <TableRow
-          key={index}
-          className="fiori-table__row"
-          onClick={() => handleRowClick(row, index)}
-        >
-          {columns.map((column) => (
-            <TableCell
-              key={`${index}-${column.key}`}
-              className="fiori-table__cell"
-            >
-              {row[column.key]}
-            </TableCell>
-          ))}
-        </TableRow>
-      ))}
-    </UI5Table>
+      {/* Table Body */}
+      <div className="fiori-table__body">
+        {data.map((row, rowIndex) => (
+          <div key={rowIndex} className="fiori-table__row">
+            {columns.map((column) => (
+              <div
+                key={column.key}
+                className="fiori-table__cell"
+                style={{
+                  width: column.width,
+                  minWidth: column.minWidth,
+                }}
+              >
+                {row[column.key]}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 

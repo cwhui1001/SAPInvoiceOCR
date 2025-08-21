@@ -6,33 +6,33 @@ import { signOut } from '@/app/dashboard/account/actions';
 
 export default function SideNav() {
   return (
-    <div className="flex h-full flex-col" style={{ backgroundColor: '#6c757d' }}>
+    <div className="flex h-full flex-col bg-white border-r border-gray-200">
       {/* Logo Section */}
       <Link
-        className="flex h-20 items-center justify-center border-b border-white/10 bg-[#5a6268] px-4"
+        className="flex h-16 items-center justify-start px-6 border-b border-gray-100"
         href="/"
       >
         <SAPBusinessOneLogo
-          width={180}
-          height={36}
+          width={140}
+          height={28}
         />
       </Link>
 
       {/* Navigation Section */}
-      <div className="flex-1 px-4 py-6">
-        <div className="space-y-2">
+      <div className="flex-1 py-6">
+        <div className="space-y-1">
           <NavLinks />
         </div>
       </div>
 
       {/* Sign Out Section */}
-      <div className="p-4 border-t border-white/10">
+      <div className="p-4 border-t border-gray-100">
         <form action={signOut}>
           <button
             type="submit"
-            className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200"
+            className="flex items-center gap-3 w-full px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200"
           >
-            <PowerIcon className="w-5 h-5" />
+            <PowerIcon className="w-4 h-4" />
             <span>Sign Out</span>
           </button>
         </form>

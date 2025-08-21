@@ -58,13 +58,13 @@ export default async function Page({
   ]);
 
   return (
-    <div className="w-full">
+    <div className="w-full responsive-main" style={{ padding: '16px' }}>
       {/* Header Section */}
       <div className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Invoices</h1>
-            <p className="mt-2 text-sm text-gray-600">
+            <h1 className="responsive-title text-3xl font-bold text-gray-900">Invoices</h1>
+            <p className="responsive-subtitle mt-2 text-sm text-gray-600">
               Manage your invoices and track payments
             </p>
           </div>

@@ -15,7 +15,7 @@ import {
 import { formatCurrency, convertFromDateInputFormat, parseStringToDate, formatDateFromObject } from './utils';
 
 // Constants
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 10;
 
 // Fetch card data from OINV table
 export async function fetchCardData() {
@@ -160,6 +160,7 @@ export async function fetchFilteredInvoices(
         status: invoice.Status === 'Done' ? 'done' : 'pending',
         pdf_url: pdfUrl,
         delivery_date: invoice.DeliveryDate ? parseStringToDate(invoice.DeliveryDate) : null,
+        upload_date: invoice.created_at ? parseStringToDate(invoice.created_at) : null,
         uploader_username: uploaderUsername,
         has_uploaded_pdf: hasUploadedPdf,
       };

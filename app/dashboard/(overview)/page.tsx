@@ -4,6 +4,7 @@ import { fetchCardData, fetchCategoryTotals, fetchUsersWithUploads, fetchTopUplo
 import CategoryPieChart from '@/app/ui/dashboard/CategoryPieChart';
 import UserCategoryPieChart from '@/app/ui/dashboard/UserCategoryPieChart';
 import TopUploaders from '@/app/ui/dashboard/TopUploaders';
+import QuickActions from '@/app/ui/dashboard/quick-actions';
 
 export default async function Page() {
   console.log('Starting Page render');
@@ -13,13 +14,13 @@ export default async function Page() {
   const topUploaders = await fetchTopUploaders();
 
   return (
-    <main>
+    <main style={{ padding: '16px', backgroundColor: '#faf9f9ff' }} className="responsive-main">
       {/* Page Header */}
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: '600', color: '#32363a', margin: '0 0 4px 0' }}>
-          SAP Business One - Dashboard
+        <h1 className="responsive-title" style={{ fontSize: '24px', fontWeight: '600', color: '#32363a', margin: '0 0 4px 0' }}>
+          Dashboard
         </h1>
-        <p style={{ fontSize: '14px', color: '#6a6d70', margin: 0 }}>
+        <p className="responsive-subtitle" style={{ fontSize: '14px', color: '#6a6d70', margin: 0 }}>
           Invoice Management System - Key metrics and insights
         </p>
       </div>
@@ -82,8 +83,10 @@ export default async function Page() {
           </div>
         </div>
 
-      {/* Charts Row */}
-      <div className="sap-grid sap-grid-2">
+      {/* Main Content Row - 2 Columns */}
+      <div className="sap-grid sap-grid-2 responsive-content">
+        {/* Left Column - Charts */}
+        <div className="responsive-column" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {/* Category Distribution Chart */}
           <div className="sap-fiori-card">
             <div className="sap-fiori-card-header">
@@ -107,14 +110,29 @@ export default async function Page() {
           </div>
         </div>
 
-      {/* Top Uploaders */}
-      <div className="sap-fiori-card" style={{ marginTop: '16px' }}>
-        <div className="sap-fiori-card-header">
-          <h3 className="sap-fiori-card-title">Top Contributors</h3>
-          <p className="sap-fiori-card-subtitle">Most active users this month</p>
-        </div>
-        <div className="sap-fiori-card-content">
-          <TopUploaders uploaders={topUploaders} />
+        {/* Right Column - Quick Actions and Top Contributors */}
+        <div className="responsive-column" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Quick Actions */}
+          <div className="sap-fiori-card">
+            <div className="sap-fiori-card-header">
+              <h3 className="sap-fiori-card-title">Quick Actions</h3>
+              <p className="sap-fiori-card-subtitle">Upload invoice documents for processing</p>
+            </div>
+            <div className="sap-fiori-card-content">
+              <QuickActions />
+            </div>
+          </div>
+
+          {/* Top Contributors */}
+          <div className="sap-fiori-card">
+            <div className="sap-fiori-card-header">
+              <h3 className="sap-fiori-card-title">Top Contributors</h3>
+              <p className="sap-fiori-card-subtitle">Most active users this month</p>
+            </div>
+            <div className="sap-fiori-card-content">
+              <TopUploaders uploaders={topUploaders} />
+            </div>
+          </div>
         </div>
       </div>
     </main>

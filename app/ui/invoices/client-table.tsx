@@ -9,7 +9,7 @@ import { formatDateToLocal, formatCurrency, formatDateFromObject } from '@/app/l
 import { type InvoicesTable } from '@/app/lib/definitions';
 import { ChevronUpIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, DocumentIcon } from '@heroicons/react/24/outline';
 
-type SortField = 'id' | 'date' | 'name' | 'amount' | 'status';
+type SortField = 'id' | 'date' | 'upload_date' | 'name' | 'amount' | 'status';
 type SortDirection = 'asc' | 'desc';
 
 export default function ClientInvoiceTable({
@@ -82,6 +82,9 @@ export default function ClientInvoiceTable({
     if (sortField === 'date') {
       aValue = new Date(a.date).getTime();
       bValue = new Date(b.date).getTime();
+    } else if (sortField === 'upload_date') {
+      aValue = a.upload_date ? new Date(a.upload_date).getTime() : 0;
+      bValue = b.upload_date ? new Date(b.upload_date).getTime() : 0;
     } else if (sortField === 'amount') {
       aValue = Number(a.amount);
       bValue = Number(b.amount);
@@ -133,12 +136,12 @@ export default function ClientInvoiceTable({
   const SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (
     <th 
       scope="col" 
-      className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors select-none"
+      className="px-2 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors select-none"
       onClick={() => handleSort(field)}
     >
-      <div className="flex items-center gap-2">
-        {children}
-        <div className="flex flex-col">
+      <div className="flex items-center gap-1">
+        <span className="truncate">{children}</span>
+        <div className="flex flex-col flex-shrink-0">
           <ChevronUpIcon 
             className={`w-3 h-3 ${sortField === field && sortDirection === 'asc' ? 'text-blue-600' : 'text-gray-400'}`} 
           />
@@ -158,7 +161,7 @@ export default function ClientInvoiceTable({
         onActionComplete={handleActionComplete}
       />
       
-      <div className="inline-block min-w-full align-middle">
+      <div className="w-full max-w-full">
         <div className="rounded-xl bg-white shadow-lg border border-gray-100 overflow-hidden">
           {/* Mobile View */}
           <div className="md:hidden divide-y divide-gray-100">
@@ -197,6 +200,9 @@ export default function ClientInvoiceTable({
                     <div>
                       <p className="font-semibold text-gray-900">{invoice.name}</p>
                       <p className="text-sm text-gray-500 font-medium">{formatDateFromObject(invoice.date)}</p>
+                      {invoice.upload_date && (
+                        <p className="text-xs text-gray-400">Uploaded: {formatDateFromObject(invoice.upload_date)}</p>
+                      )}
                     </div>
                   </div>
                   <InteractiveInvoiceStatus id={invoice.id} status={invoice.status} />
@@ -216,24 +222,37 @@ export default function ClientInvoiceTable({
             ))}
           </div>
           {/* Desktop Table */}
-          <div className="overflow-x-auto">
-            <table className="hidden min-w-full text-gray-900 md:table">
+          <div className="overflow-x-auto max-w-full">
+            <table className="hidden min-w-full text-gray-900 md:table table-fixed">
+              <colgroup>
+                <col className="w-12" />
+                <col className="w-32" />
+                <col className="w-28" />
+                <col className="w-28" />
+                <col className="w-48" />
+                <col className="w-32" />
+                <col className="w-24" />
+                <col className="w-20" />
+              </colgroup>
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                    <input
-                      type="checkbox"
-                      checked={selectedInvoices.length === sortedInvoices.length && sortedInvoices.length > 0}
-                      onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
+                  <th scope="col" className="px-2 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    <div className="flex justify-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedInvoices.length === sortedInvoices.length && sortedInvoices.length > 0}
+                        onChange={(e) => handleSelectAll(e.target.checked)}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                    </div>
                   </th>
                   <SortableHeader field="id">Invoice ID</SortableHeader>
+                  <SortableHeader field="upload_date">Upload Date</SortableHeader>
                   <SortableHeader field="date">Date</SortableHeader>
                   <SortableHeader field="name">Customer</SortableHeader>
-                  <SortableHeader field="amount">Total Amount</SortableHeader>
+                  <SortableHeader field="amount">Amount</SortableHeader>
                   <SortableHeader field="status">Status</SortableHeader>
-                  <th scope="col" className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th scope="col" className="px-2 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -244,55 +263,62 @@ export default function ClientInvoiceTable({
                     key={invoice.id}
                     className="hover:bg-blue-50 transition-colors duration-200"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input
-                        type="checkbox"
-                        checked={selectedInvoices.includes(invoice.id)}
-                        onChange={(e) => handleSelectInvoice(invoice.id, e.target.checked)}
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                      />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex flex-col">
-                        <div className="flex flex-col">
-                          <button
-                            onClick={() => handlePdfView(invoice.id)}
-                            className="text-blue-600 hover:text-blue-800 font-semibold hover:underline transition-colors cursor-pointer flex items-center gap-1"
-                            title={invoice.pdf_url ? 'Click to view PDF' : 'No PDF available'}
-                          >
-                            #{invoice.docNum || invoice.id}
-                            {invoice.pdf_url && (
-                              <DocumentIcon className="h-4 w-4 text-blue-500" />
-                            )}
-                          </button>
-                          <span className="text-xs text-gray-500 mt-0.5">
-                            {invoice.uploader_username
-                              ? `uploaded by ${invoice.uploader_username}`
-                              : invoice.has_uploaded_pdf
-                                ? 'uploaded file'
-                                : 'uploaded by user'}
-                          </span>
-                        </div>
+                    <td className="px-2 py-3 whitespace-nowrap">
+                      <div className="flex justify-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedInvoices.includes(invoice.id)}
+                          onChange={(e) => handleSelectInvoice(invoice.id, e.target.checked)}
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        />
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-600">
+                    <td className="px-2 py-3 whitespace-nowrap">
+                      <div className="flex flex-col">
+                        <button
+                          onClick={() => handlePdfView(invoice.id)}
+                          className="text-blue-600 hover:text-blue-800 font-semibold hover:underline transition-colors cursor-pointer flex items-center gap-1 text-sm"
+                          title={invoice.pdf_url ? 'Click to view PDF' : 'No PDF available'}
+                        >
+                          <span className="truncate">#{invoice.docNum || invoice.id}</span>
+                          {invoice.pdf_url && (
+                            <DocumentIcon className="h-3 w-3 text-blue-500 flex-shrink-0" />
+                          )}
+                        </button>
+                        <span className="text-xs text-gray-500 mt-0.5 truncate">
+                          {invoice.uploader_username
+                            ? `by ${invoice.uploader_username}`
+                            : invoice.has_uploaded_pdf
+                              ? 'uploaded'
+                              : 'user'}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-2 py-3 whitespace-nowrap">
+                      <div className="text-xs text-gray-500">
+                        {invoice.upload_date ? formatDateFromObject(invoice.upload_date) : '-'}
+                      </div>
+                    </td>
+                    <td className="px-2 py-3 whitespace-nowrap">
+                      <div className="text-xs font-medium text-gray-600">
                         {formatDateFromObject(invoice.date)}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-800">{invoice.name}</div>
+                    <td className="px-2 py-3 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-800 truncate" title={invoice.name}>
+                        {invoice.name}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-2 py-3 whitespace-nowrap">
                       <div className="text-sm font-bold text-green-600">
                         {formatCurrency(invoice.amount)}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-2 py-3 whitespace-nowrap">
                       <InteractiveInvoiceStatus id={invoice.id} status={invoice.status} />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <div className="flex justify-center gap-2">
+                    <td className="px-1 py-3 whitespace-nowrap text-center">
+                      <div className="flex justify-center gap-1">
                         <UpdateInvoice id={invoice.id} />
                         <DeleteInvoice id={invoice.id} onModalStateChange={setIsModalOpen} />
                       </div>

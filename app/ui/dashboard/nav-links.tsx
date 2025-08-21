@@ -48,14 +48,14 @@ export default function NavLinks() {
             key={link.name}
             href={link.href}
             className={`
-              flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200
+              flex items-center gap-3 px-6 py-2 text-sm font-medium transition-all duration-200 relative
               ${isActive
-                ? 'bg-white/15 text-white border-l-4 border-white'
-                : 'text-white/80 hover:bg-white/10 hover:text-white'
+                ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600'
+                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
               }
             `}
           >
-            <LinkIcon className="w-5 h-5" />
+            <LinkIcon className="w-4 h-4" />
             <span>{link.name}</span>
           </Link>
         );
@@ -64,8 +64,8 @@ export default function NavLinks() {
       {/* Superadmin Links */}
       {isSuperadmin && (
         <>
-          <div className="border-t border-white/10 my-4 pt-4">
-            <p className="text-white/60 text-xs uppercase tracking-wider px-4 mb-2">
+          <div className="border-t border-gray-200 my-4 pt-4">
+            <p className="text-gray-500 text-xs uppercase tracking-wider px-6 mb-2">
               Administration
             </p>
             {superadminLinks.map((link) => {
@@ -77,14 +77,14 @@ export default function NavLinks() {
                   key={link.name}
                   href={link.href}
                   className={`
-                    flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200
+                    flex items-center gap-3 px-6 py-2 text-sm font-medium transition-all duration-200 relative
                     ${isActive
-                      ? 'bg-white/15 text-white border-l-4 border-white'
-                      : 'text-white/80 hover:bg-white/10 hover:text-white'
+                      ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     }
                   `}
                 >
-                  <LinkIcon className="w-5 h-5" />
+                  <LinkIcon className="w-4 h-4" />
                   <span>{link.name}</span>
                 </Link>
               );

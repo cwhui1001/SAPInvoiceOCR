@@ -51,15 +51,15 @@ export default async function AdminManagementPage() {
   }
 
   return (
-    <div className="w-full">
-      <div className="flex w-full items-center justify-between">
-        <h1 className="text-2xl font-bold">Admin Management</h1>
+    <div className="w-full responsive-main" style={{ padding: '16px' }}>
+      <div className="flex w-full flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="responsive-title text-2xl font-bold">Admin Management</h1>
       </div>
       
       <div className="mt-4 p-4 bg-blue-50 rounded-lg">
         <h3 className="font-semibold">Current User:</h3>
-        <p>ID: {currentUser.id}</p>
-        <p>Email: {currentUser.email}</p>
+        <p className="responsive-subtitle break-all">ID: {currentUser.id}</p>
+        <p className="responsive-subtitle">Email: {currentUser.email}</p>
       </div>
       
       <div className="mt-6 p-6 bg-white rounded-lg shadow">

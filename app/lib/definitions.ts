@@ -64,6 +64,7 @@ export type InvoicesTable = {
   docNum?: string; // DocNum for display purposes
   uploader_username?: string; // Username of who uploaded PDF
   has_uploaded_pdf?: boolean; // Whether this invoice has uploaded PDFs
+  upload_date?: Date | null;
 };
 
 export type CustomersTableType = {

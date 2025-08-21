@@ -34,7 +34,7 @@ export default function WelcomePage() {
           <div className="mb-16">
             <h1 className="text-5xl font-bold text-gray-900 mb-6">
               Welcome to Your
-              <span className="text-blue-600 block mt-2">AI Portal</span>
+              <span className="text-blue-600 block mt-2">AI Invoice Portal</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Powered by SAP Business One, our intelligent invoice management system 
