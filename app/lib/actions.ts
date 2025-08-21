@@ -182,16 +182,38 @@ export async function deleteInvoice(invoiceId: string, shouldRedirect: boolean =
     }
 
     // Get associated PDF files from the pdf table
-    const { data: pdfFiles, error: pdfError } = await supabase
-      .from('pdf')
-      .select('pdf_url, pdf_uuid')
-      .ilike('pdf_url', `%${invoiceData.DocNum}%`);
-
-    if (pdfError) {
-      console.log('Warning: Could not fetch PDF files:', pdfError);
+    // Match by exact pdf_url or by DocNum in the filename
+    let pdfFiles: any[] = [];
+    
+    // First try to match by exact pdf_url if invoice has one
+    if (invoiceData.pdf_url) {
+      const { data: pdfByUrl, error: pdfUrlError } = await supabase
+        .from('pdf')
+        .select('pdf_url, pdf_uuid, pdf_filename')
+        .eq('pdf_url', invoiceData.pdf_url);
+      
+      if (!pdfUrlError && pdfByUrl) {
+        pdfFiles = [...pdfFiles, ...pdfByUrl];
+      }
     }
-
-    console.log('Found PDF files to delete:', pdfFiles);
+    
+    // Also try to match by DocNum in the filename or URL
+    // This covers cases where the filename contains the DocNum
+    const { data: pdfByDocNum, error: pdfDocNumError } = await supabase
+      .from('pdf')
+      .select('pdf_url, pdf_uuid, pdf_filename')
+      .or(`pdf_filename.ilike.%${invoiceData.DocNum}%,pdf_url.ilike.%${invoiceData.DocNum}%`);
+    
+    if (!pdfDocNumError && pdfByDocNum) {
+      pdfFiles = [...pdfFiles, ...pdfByDocNum];
+    }
+    
+    // Remove duplicates based on pdf_uuid
+    const uniquePdfFiles = Array.from(
+      new Map(pdfFiles.map(file => [file.pdf_uuid, file])).values()
+    );
+    
+    console.log('Found PDF files to delete:', uniquePdfFiles);
 
     // Helper function to extract file path from Supabase URL
     const getFilePathFromUrl = (url: string): { bucket: string; path: string } | null => {
@@ -219,8 +241,8 @@ export async function deleteInvoice(invoiceId: string, shouldRedirect: boolean =
     }
 
     // Add files from pdf table
-    if (pdfFiles && pdfFiles.length > 0) {
-      pdfFiles.forEach(pdfFile => {
+    if (uniquePdfFiles && uniquePdfFiles.length > 0) {
+      uniquePdfFiles.forEach(pdfFile => {
         if (pdfFile.pdf_url) {
           filesToDelete.add(pdfFile.pdf_url);
         }
@@ -254,20 +276,22 @@ export async function deleteInvoice(invoiceId: string, shouldRedirect: boolean =
     }
 
     // Delete records from pdf table
-    if (pdfFiles && pdfFiles.length > 0) {
+    if (uniquePdfFiles && uniquePdfFiles.length > 0) {
       // Use the specific UUIDs of the files we found to ensure precise deletion
-      const pdfUuids = pdfFiles.map(file => file.pdf_uuid);
+      const pdfUuids = uniquePdfFiles.map(file => file.pdf_uuid).filter(uuid => uuid);
       
-      const { error: deletePdfError } = await supabase
-        .from('pdf')
-        .delete()
-        .in('pdf_uuid', pdfUuids);
+      if (pdfUuids.length > 0) {
+        const { error: deletePdfError } = await supabase
+          .from('pdf')
+          .delete()
+          .in('pdf_uuid', pdfUuids);
 
-      if (deletePdfError) {
-        console.error('Error deleting PDF records:', deletePdfError);
-        // Continue with deletion even if PDF records deletion fails
-      } else {
-        console.log(`Successfully deleted ${pdfUuids.length} PDF records from pdf table`);
+        if (deletePdfError) {
+          console.error('Error deleting PDF records:', deletePdfError);
+          // Continue with deletion even if PDF records deletion fails
+        } else {
+          console.log(`Successfully deleted ${pdfUuids.length} PDF records from pdf table`);
+        }
       }
     }
 
