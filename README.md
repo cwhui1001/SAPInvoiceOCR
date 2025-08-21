@@ -242,6 +242,4 @@ For issues, questions, or suggestions, please open an issue on GitHub or contact
 - Built with [Next.js](https://nextjs.org/)
 - Database powered by [Supabase](https://supabase.com/)
 - Workflow automation by [n8n](https://n8n.io/)
-- UI components from [Radix UI](https://www.radix-ui.com/)#   S A P I n v o i c e O C R 
- 
- 
+- UI components from [Radix UI](https://www.radix-ui.com/)
