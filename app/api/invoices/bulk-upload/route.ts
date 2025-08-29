@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { createAdminClient, createClient } from '@/utils/supabase/server';
-
+import { createClient } from '@/utils/supabase/server';
+//-------------------------------------------------------------------------
+// Bulk upload invoices // create new records
 export async function POST(request: Request) {
   console.log('=== BULK UPLOAD API CALLED ==='); // Debug log
   try {
@@ -28,8 +29,7 @@ export async function POST(request: Request) {
     }
 
     // Get user's profile information for username
-    const supabase = await createAdminClient();
-    const { data: userProfile, error: profileError } = await supabase
+    const { data: userProfile, error: profileError } = await userClient
       .from('profiles')
       .select('username, full_name')
       .eq('id', user.id)
@@ -57,63 +57,14 @@ export async function POST(request: Request) {
           continue;
         }
 
-        // 2. Upload file first, then link to invoice later if needed
-
-        // 3. Upload file to storage
+        // 2. Get file buffer for n8n webhook
         const fileBuffer = await file.arrayBuffer();
         const timestamp = Date.now();
         const filename = `${timestamp}-${file.name.replace(/\s+/g, '_')}`; // Replace spaces with underscores
 
-        const {  data: storageData, error: storageError } = await supabase
-          .storage
-          .from('invoices')
-          .upload(`bulk-uploads/${filename}`, fileBuffer, {
-            contentType: file.type,
-            upsert: false, // Don't overwrite existing files
-            cacheControl: '3600'
-          });
-        if (storageError) {
-          console.error('Storage upload failed:', {
-            message: storageError.message,
-            name: storageError.name,
-            status: (storageError as any)?.status,
-            file: filename,
-            size: file.size,
-            type: file.type,
-          });
-        } else {
-          console.log('Storage upload success:', storageData?.path || filename);
-        }
+        console.log(`Processing file: ${file.name} (${file.size} bytes)`);
 
-        if (storageError) {
-          throw new Error(`Storage error: ${storageError.message}`);
-        }
-
-        // 4. Get public URL
-        const { data: { publicUrl } } = supabase
-          .storage
-          .from('invoices')
-          .getPublicUrl(`bulk-uploads/${filename}`);
-
-        // 5. Create PDF record with actual uploader information
-        const { data: pdfRecord, error: dbError } = await supabase
-          .from('pdf')
-          .insert({
-            pdf_url: publicUrl,
-            pdf_filename: filename, // Keep original timestamp-filename format
-            uploader_user_id: user.id, // Store actual uploader's user ID
-            uploader_username: uploaderUsername, // Store username for display
-            created_by: user.id // Audit trail
-          })
-          .select('id, created_at, pdf_uuid')
-          .single();
-
-        if (dbError) {
-          console.error('Failed inserting pdf record:', dbError.message, dbError);
-          throw new Error(`Database error: ${dbError.message}`);
-        }
-
-        // 6. Trigger processing workflow (n8n will handle OCR and linking)
+        // 3. Trigger processing workflow (n8n will handle OCR and linking)
         let executionId = null;
         if (n8nWebhook) {
           console.log(`Calling n8n webhook: ${n8nWebhook}`); // Debug log
@@ -124,13 +75,13 @@ export async function POST(request: Request) {
               body: JSON.stringify({
                 type: 'invoice_upload',
                 action: 'process',
-                pdf: {
-                  id: pdfRecord.id,
-                  uuid: pdfRecord.pdf_uuid,
-                  url: publicUrl,
-                  originalName: file.name,
-                  storedName: filename
-                },
+                originalName: file.name,
+                storedName: filename,
+                fileContent: Buffer.from(fileBuffer).toString('base64'),
+                fileType: file.type,
+                fileSize: file.size,
+                uploaderId: user.id,
+                uploaderUsername: uploaderUsername,
                 timestamp: new Date().toISOString()
               })
             });
@@ -179,17 +130,15 @@ export async function POST(request: Request) {
           console.log('No n8n webhook URL configured'); // Debug log
         }
 
-        // 6. Prepare success response
+        // 4. Prepare success response
         uploadResults.push({
           filename: file.name,
           success: true,
-          url: `/api/invoices/pdfs/${pdfRecord.id}`,
           storageFilename: filename,
-          pdfId: pdfRecord.id,
-          pdfUuid: pdfRecord.pdf_uuid,
           executionId: executionId, // Include execution ID for progress tracking
           invoiceNumber: null, // Not linked yet
-          invoiceStatus: null
+          invoiceStatus: null,
+          message: 'File sent to n8n for processing'
         });
 
       } catch (error) {

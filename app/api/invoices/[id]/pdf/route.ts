@@ -1,3 +1,6 @@
+// PDF retrieval
+// Fetches invoice to get PDF URL
+
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/utils/supabase/server';
 

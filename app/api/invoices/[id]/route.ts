@@ -1,6 +1,10 @@
+//CRUD operations for invoices
+//Fetches invoice + line items for editing
+
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/utils/supabase/server';
-
+//-------------------------------------------------------------------------
+// Read invoice
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -51,7 +55,8 @@ export async function GET(
     );
   }
 }
-
+//-------------------------------------------------------------------------
+// Update invoice //edit invoice
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -126,7 +131,8 @@ export async function PUT(
     );
   }
 }
-
+//-------------------------------------------------------------------------
+// Delete invoice
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }

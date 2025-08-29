@@ -1,34 +1,53 @@
-// Import Supabase functions
+// Hybrid data access layer - switches between Supabase and .NET API
 import {
-  fetchCardData,
-  fetchFilteredInvoices,
-  fetchInvoicesPages,
-  fetchInvoiceById,
-  fetchCustomers,
-  fetchFilteredCustomers,
-  fetchCategoryTotals,
-  fetchUsersWithUploads,
-  fetchUserCategoryTotals,
-  fetchTopUploaders,
+  fetchCardData as fetchCardDataSupabase,
+  fetchFilteredInvoices as fetchFilteredInvoicesSupabase,
+  fetchInvoicesPages as fetchInvoicesPagesSupabase,
+  fetchInvoiceById as fetchInvoiceByIdSupabase,
+  fetchCustomers as fetchCustomersSupabase,
+  fetchFilteredCustomers as fetchFilteredCustomersSupabase,
+  fetchCategoryTotals as fetchCategoryTotalsSupabase,
+  fetchUsersWithUploads as fetchUsersWithUploadsSupabase,
+  fetchUserCategoryTotals as fetchUserCategoryTotalsSupabase,
+  fetchTopUploaders as fetchTopUploadersSupabase,
 } from './data-supabase';
 
-// Constants
-const DATABASE_TYPE = 'supabase'; // Hardcode for Supabase only
+import {
+  fetchCardData as fetchCardDataNetAPI,
+  fetchFilteredInvoices as fetchFilteredInvoicesNetAPI,
+  fetchInvoicesPages as fetchInvoicesPagesNetAPI,
+  fetchInvoiceById as fetchInvoiceByIdNetAPI,
+  fetchCustomers as fetchCustomersNetAPI,
+  fetchFilteredCustomers as fetchFilteredCustomersNetAPI,
+  fetchCategoryTotals as fetchCategoryTotalsNetAPI,
+  fetchUsersWithUploads as fetchUsersWithUploadsNetAPI,
+  fetchUserCategoryTotals as fetchUserCategoryTotalsNetAPI,
+  fetchTopUploaders as fetchTopUploadersNetAPI,
+  addInvoice as addInvoiceNetAPI,
+  uploadFiles as uploadFilesNetAPI,
+} from './data-netapi';
+
+// Get database type from environment
+const DATABASE_TYPE = process.env.DATABASE_TYPE || 'supabase';
 const ITEMS_PER_PAGE = 6;
 
-// Export all Supabase functions directly
-export {
-  fetchCardData,
-  fetchFilteredInvoices,
-  fetchInvoicesPages,
-  fetchInvoiceById,
-  fetchCustomers,
-  fetchFilteredCustomers,
-  fetchCategoryTotals,
-  fetchUsersWithUploads,
-  fetchUserCategoryTotals,
-  fetchTopUploaders,
-};
+console.log(`[DataLayer] Using ${DATABASE_TYPE} as data source`);
+
+// Export functions that switch based on DATABASE_TYPE
+export const fetchCardData = DATABASE_TYPE === 'netapi' ? fetchCardDataNetAPI : fetchCardDataSupabase;
+export const fetchFilteredInvoices = DATABASE_TYPE === 'netapi' ? fetchFilteredInvoicesNetAPI : fetchFilteredInvoicesSupabase;
+export const fetchInvoicesPages = DATABASE_TYPE === 'netapi' ? fetchInvoicesPagesNetAPI : fetchInvoicesPagesSupabase;
+export const fetchInvoiceById = DATABASE_TYPE === 'netapi' ? fetchInvoiceByIdNetAPI : fetchInvoiceByIdSupabase;
+export const fetchCustomers = DATABASE_TYPE === 'netapi' ? fetchCustomersNetAPI : fetchCustomersSupabase;
+export const fetchFilteredCustomers = DATABASE_TYPE === 'netapi' ? fetchFilteredCustomersNetAPI : fetchFilteredCustomersSupabase;
+export const fetchCategoryTotals = DATABASE_TYPE === 'netapi' ? fetchCategoryTotalsNetAPI : fetchCategoryTotalsSupabase;
+export const fetchUsersWithUploads = DATABASE_TYPE === 'netapi' ? fetchUsersWithUploadsNetAPI : fetchUsersWithUploadsSupabase;
+export const fetchUserCategoryTotals = DATABASE_TYPE === 'netapi' ? fetchUserCategoryTotalsNetAPI : fetchUserCategoryTotalsSupabase;
+export const fetchTopUploaders = DATABASE_TYPE === 'netapi' ? fetchTopUploadersNetAPI : fetchTopUploadersSupabase;
+
+// .NET API specific functions
+export const addInvoice = addInvoiceNetAPI;
+export const uploadFiles = uploadFilesNetAPI;
 
 // Export updateInvoiceStatus function (assuming it's used)
 export async function updateInvoiceStatus(invoiceId: string, newStatus: string) {
